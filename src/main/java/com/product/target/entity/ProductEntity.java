@@ -1,5 +1,7 @@
 package com.product.target.entity;
 
+import com.product.target.domain.Price;
+import com.product.target.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,16 +17,28 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "product")
 public class ProductEntity {
 
-    @Id
-    @Field("id")
-    private Long id;
+  @Id
+  @Field("id")
+  private String id;
 
-    @Field("name")
-    private String name;
+  @Field("productId")
+  private Long productId;
 
-    @Field("price")
-    private Double price;
+  @Field("name")
+  private String name;
 
-    @Field("currency")
-    private String currency;
+  @Field("price")
+  private Double price;
+
+  @Field("currency")
+  private String currency;
+
+  public Product toModel() {
+    return Product.builder()
+        .id(id)
+        .productId(productId)
+        .name(name)
+        .currentPrice(Price.builder().value(price).currency(currency).build())
+        .build();
+  }
 }
