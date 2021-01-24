@@ -1,10 +1,14 @@
 package com.product.target.repository;
 
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.product.target.dao.ProductDao;
 import com.product.target.domain.Product;
 import com.product.target.entity.ProductEntity;
 import com.product.target.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.Document;
 import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -78,13 +82,38 @@ public class ProductRepository implements ProductPersistence {
   }
 
   @Override
-  public List<Product> fetchAllProductsByCategory(String productCategory) throws ProductNotFoundException {
+  public List<Product> fetchAllProductsByCategory(String productCategory)
+      throws ProductNotFoundException {
     log.info(
         "Fetching all product details from database for product category : " + productCategory);
-    Optional<List<ProductEntity>> productEntityList = productDao.findAllProductsByCategory(productCategory);
+    Optional<List<ProductEntity>> productEntityList =
+        productDao.findAllProductsByCategory(productCategory);
     if (productEntityList.isPresent())
-      return productEntityList.get().stream().map(ProductEntity::toModel).collect(Collectors.toList());
-    else
-      throw new ProductNotFoundException(productCategory);
+      return productEntityList.get().stream()
+          .map(ProductEntity::toModel)
+          .collect(Collectors.toList());
+    else throw new ProductNotFoundException(productCategory);
+  }
+
+  @Override
+  public Product saveProduct(Product product) {
+    log.info("Persisting product details into database : " + product);
+    MongoCollection<Document> productCollection = getDatabaseConnection();
+    productCollection.insertOne(documentToPersist(product));
+    return product;
+  }
+
+  private Document documentToPersist(Product product) {
+    return new Document()
+        .append("productId", product.getProductId().toString())
+        .append("name", product.getName())
+        .append("category", product.getCategory())
+        .append("price", product.getCurrentPrice().getValue().toString())
+        .append("currency", product.getCurrentPrice().getCurrency());
+  }
+
+  private MongoCollection<Document> getDatabaseConnection() {
+    MongoDatabase mongoDatabase = new MongoClient("localhost", 27017).getDatabase("product");
+    return mongoDatabase.getCollection("product");
   }
 }
