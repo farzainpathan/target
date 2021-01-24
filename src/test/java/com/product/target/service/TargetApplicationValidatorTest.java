@@ -96,4 +96,16 @@ public class TargetApplicationValidatorTest {
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("The requesting parameter value cannot be null or Empty");
   }
+
+  @Test
+  @Order(7)
+  @DisplayName("should throw exception for Empty product category")
+  public void shouldThrowExceptionForProductCategoryEmpty(@Mock ProductPersistence productPersistence) {
+    // Given
+    RequestProduct requestProduct = Mockito.spy(new ProductService(productPersistence));
+    // When and Then
+    assertThatThrownBy(() -> requestProduct.getAllProductsByProductCategory(""))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("The requesting parameter value cannot be null or Empty");
+  }
 }

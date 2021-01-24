@@ -17,4 +17,6 @@ public interface ProductPersistence {
   Product fetchProductByProductName(String productName) throws ProductNotFoundException;
 
   Product fetchProductById(String id) throws ProductNotFoundException;
+
+  List<Product> fetchAllProductsByCategory(String grocery) throws ProductNotFoundException;
 }

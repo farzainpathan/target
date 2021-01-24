@@ -52,4 +52,11 @@ public class ProductService implements RequestProduct {
     PARAMETER_REQUEST_VALIDATOR.assertParameterStringValue(id);
     return productPersistence.fetchProductById(id);
   }
+
+  @Override
+  public List<Product> getAllProductsByProductCategory(String productCategory) throws ProductNotFoundException {
+    log.info("Fetching product details from repository for product category : " + productCategory);
+    PARAMETER_REQUEST_VALIDATOR.assertParameterStringValue(productCategory);
+    return productPersistence.fetchAllProductsByCategory(productCategory);
+  }
 }

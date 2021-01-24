@@ -45,7 +45,10 @@ public class ProductRepository implements ProductPersistence {
   public List<Product> fetchAllProductsWithinPriceRange(Double lowerLimit, Double higherLimit)
       throws ProductNotFoundException {
     log.info(
-        "Fetching all products within the price range between: " + lowerLimit + " and " + higherLimit);
+        "Fetching all products within the price range between: "
+            + lowerLimit
+            + " and "
+            + higherLimit);
     List<ProductEntity> entityList =
         mongoTemplate.find(getQueryForPriceRange(lowerLimit, higherLimit), ProductEntity.class);
     if (entityList.size() > 0)
@@ -70,8 +73,18 @@ public class ProductRepository implements ProductPersistence {
   public Product fetchProductById(String id) throws ProductNotFoundException {
     log.info("Fetching product details from database for product id : " + id);
     Optional<ProductEntity> productEntity = productDao.findById(id);
-    if (productEntity.isPresent())
-      return productEntity.get().toModel();
+    if (productEntity.isPresent()) return productEntity.get().toModel();
     else throw new ProductNotFoundException(id);
+  }
+
+  @Override
+  public List<Product> fetchAllProductsByCategory(String productCategory) throws ProductNotFoundException {
+    log.info(
+        "Fetching all product details from database for product category : " + productCategory);
+    Optional<List<ProductEntity>> productEntityList = productDao.findAllProductsByCategory(productCategory);
+    if (productEntityList.isPresent())
+      return productEntityList.get().stream().map(ProductEntity::toModel).collect(Collectors.toList());
+    else
+      throw new ProductNotFoundException(productCategory);
   }
 }

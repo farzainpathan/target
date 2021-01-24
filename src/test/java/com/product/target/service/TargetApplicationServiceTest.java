@@ -124,15 +124,44 @@ public class TargetApplicationServiceTest {
     Product product = requestProduct.getProductByProductName("Canada Dry Ginger Ale - 2 L Bottle");
     // Then
     assertThat(product)
-            .isNotNull()
-            .extracting("id", "productId", "name", "currentPrice", "category")
-            .containsExactly(
-                    mockProduct().getId(),
-                    mockProduct().getProductId(),
-                    mockProduct().getName(),
-                    mockProduct().getCurrentPrice(),
-                    mockProduct().getCategory());
+        .isNotNull()
+        .extracting("id", "productId", "name", "currentPrice", "category")
+        .containsExactly(
+            mockProduct().getId(),
+            mockProduct().getProductId(),
+            mockProduct().getName(),
+            mockProduct().getCurrentPrice(),
+            mockProduct().getCategory());
     verify(requestProduct, times(1)).getProductByProductName("Canada Dry Ginger Ale - 2 L Bottle");
+  }
+
+  @Test
+  @Order(6)
+  @DisplayName("should fetch product details when asked by product category from repository")
+  public void shouldFetchProductDetailsByProductCategory(@Mock RequestProduct requestProduct) throws ProductNotFoundException {
+    // Given
+    when(requestProduct.getAllProductsByProductCategory("grocery")).thenReturn(mockProductList());
+    // When
+    List<Product> productList = requestProduct.getAllProductsByProductCategory("grocery");
+    // Then
+    assertThat(productList)
+        .isNotNull()
+        .isNotEmpty()
+        .hasSize(2)
+        .extracting("id", "productId", "name", "currentPrice")
+        .containsExactly(
+            tuple(
+                mockProductList().get(0).getId(),
+                mockProductList().get(0).getProductId(),
+                mockProductList().get(0).getName(),
+                mockProductList().get(0).getCurrentPrice()),
+            tuple(
+                mockProductList().get(1).getId(),
+                mockProductList().get(1).getProductId(),
+                mockProductList().get(1).getName(),
+                mockProductList().get(1).getCurrentPrice()));
+
+    verify(requestProduct, times(1)).getAllProductsByProductCategory("grocery");
   }
   // ****************************************
   // ***************  UPDATE  ***************

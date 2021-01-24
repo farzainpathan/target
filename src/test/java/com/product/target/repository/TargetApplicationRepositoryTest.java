@@ -38,7 +38,6 @@ public class TargetApplicationRepositoryTest {
     // When
     List<Product> productList = productPersistence.fetchAllProducts();
     // Then
-    System.out.println(productList);
     assertThat(productList)
         .isNotEmpty()
         .isNotNull()
@@ -171,7 +170,26 @@ public class TargetApplicationRepositoryTest {
     // When and Then
     assertThatThrownBy(() -> productPersistence.fetchProductByProductName("invalid-name"))
         .isInstanceOf(ProductNotFoundException.class)
-        .hasMessageContaining("No product found in the database with name|id: invalid-name");
+        .hasMessageContaining("No product found in the database with name|id|category: invalid-name");
+  }
+
+  @Test
+  @Order(9)
+  @DisplayName("should fetch all the product details By category from database")
+  public void shouldFetchAllProductDetailByCategory() throws ProductNotFoundException {
+    // Given data from changelogs
+    // When
+    List<Product> productList = productPersistence.fetchAllProductsByCategory("grocery");
+    // Then
+    assertThat(productList)
+            .isNotNull()
+            .isNotEmpty()
+            .hasSize(2)
+            .extracting("productId", "category")
+            .contains(
+                    tuple(100L, "grocery"),
+                    tuple(200L, "grocery")
+            );
   }
   // ****************************************
   // ***************  UPDATE  ***************

@@ -16,4 +16,6 @@ public interface RequestProduct {
   Product getProductByProductName(String productName) throws ProductNotFoundException;
 
   Product getProductById(String id) throws ProductNotFoundException;
+
+    List<Product> getAllProductsByProductCategory(String productCategory) throws ProductNotFoundException;
 }
