@@ -19,4 +19,6 @@ public interface ProductPersistence {
   Product fetchProductById(String id) throws ProductNotFoundException;
 
   List<Product> fetchAllProductsByCategory(String grocery) throws ProductNotFoundException;
+
+  Product saveProduct(Product product);
 }

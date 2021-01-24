@@ -78,8 +78,8 @@ public class ProductController {
 
   @PostMapping("/products/save")
   @ApiOperation(value = "This endpoint save the products information into database")
-  public Product saveProduct(Product product) throws ProductNotFoundException {
+  public Product saveProduct(Product product) {
     log.info("Persisting the new product : " + product);
-    throw new ProductNotFoundException("Yet to be implemented");
+    return requestProduct.saveProduct(product);
   }
 }

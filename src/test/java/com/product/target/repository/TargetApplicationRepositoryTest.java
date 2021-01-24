@@ -97,7 +97,7 @@ public class TargetApplicationRepositoryTest {
   @Order(4)
   @DisplayName(
       "should throw exception when asked for product details by product Id not exist in database")
-  public void shouldThrowExceptionWhenProductIdNotExist() throws ProductNotFoundException {
+  public void shouldThrowExceptionWhenProductIdNotExist() {
     // Given data from changelogs
     // When and Then
     assertThatThrownBy(() -> productPersistence.fetchProductByProductId(1000L))
@@ -133,8 +133,7 @@ public class TargetApplicationRepositoryTest {
   @Order(6)
   @DisplayName(
       "should throw exception when no products found when asked by requested price range from database")
-  public void shouldThrowExceptionWhenNoProductsFoundByPriceRange()
-      throws ProductNotFoundException {
+  public void shouldThrowExceptionWhenNoProductsFoundByPriceRange() {
     // Given data from changelogs
     // When and Then
     assertThatThrownBy(() -> productPersistence.fetchAllProductsWithinPriceRange(2000.00, 3000.00))
@@ -165,12 +164,13 @@ public class TargetApplicationRepositoryTest {
   @Test
   @Order(8)
   @DisplayName("should throw exception when no products found when asked by name")
-  public void shouldThrowExceptionWhenNoProductsFoundByName() throws ProductNotFoundException {
+  public void shouldThrowExceptionWhenNoProductsFoundByName() {
     // Given data from changelogs
     // When and Then
     assertThatThrownBy(() -> productPersistence.fetchProductByProductName("invalid-name"))
         .isInstanceOf(ProductNotFoundException.class)
-        .hasMessageContaining("No product found in the database with name|id|category: invalid-name");
+        .hasMessageContaining(
+            "No product found in the database with name|id|category: invalid-name");
   }
 
   @Test
@@ -182,14 +182,11 @@ public class TargetApplicationRepositoryTest {
     List<Product> productList = productPersistence.fetchAllProductsByCategory("grocery");
     // Then
     assertThat(productList)
-            .isNotNull()
-            .isNotEmpty()
-            .hasSize(2)
-            .extracting("productId", "category")
-            .contains(
-                    tuple(100L, "grocery"),
-                    tuple(200L, "grocery")
-            );
+        .isNotNull()
+        .isNotEmpty()
+        .hasSize(2)
+        .extracting("productId", "category")
+        .contains(tuple(100L, "grocery"), tuple(200L, "grocery"));
   }
   // ****************************************
   // ***************  UPDATE  ***************
@@ -198,4 +195,35 @@ public class TargetApplicationRepositoryTest {
   // ****************************************
   // ***************  SAVE  *****************
   // ****************************************
+  @Test
+  @Order(9)
+  @DisplayName("should save product details into database")
+  public void shouldSaveProductDetails() {
+    // Given data from changelogs
+    // When
+    Product product = productPersistence.saveProduct(saveProduct());
+    // Then
+    assertThat(product).isNotNull();
+    assertThat(productPersistence.fetchAllProducts())
+        .isNotNull()
+        .extracting("productId", "category", "name", "currentPrice")
+        .contains(
+            tuple(
+                saveProduct().getProductId(),
+                saveProduct().getCategory(),
+                saveProduct().getName(),
+                saveProduct().getCurrentPrice()));
+  }
+
+  // ****************************************
+  // ***************  HELPER ****************
+  // ****************************************
+  private Product saveProduct() {
+    return Product.builder()
+        .productId(800L)
+        .name("From test testing the save method")
+        .category("furniture")
+        .currentPrice(Price.builder().value(20.00).currency("USD").build())
+        .build();
+  }
 }

@@ -138,7 +138,8 @@ public class TargetApplicationServiceTest {
   @Test
   @Order(6)
   @DisplayName("should fetch product details when asked by product category from repository")
-  public void shouldFetchProductDetailsByProductCategory(@Mock RequestProduct requestProduct) throws ProductNotFoundException {
+  public void shouldFetchProductDetailsByProductCategory(@Mock RequestProduct requestProduct)
+      throws ProductNotFoundException {
     // Given
     when(requestProduct.getAllProductsByProductCategory("grocery")).thenReturn(mockProductList());
     // When
@@ -170,7 +171,18 @@ public class TargetApplicationServiceTest {
   // ****************************************
   // ***************  SAVE  *****************
   // ****************************************
-
+  @Test
+  @Order(7)
+  @DisplayName("should save product details through repository")
+  public void shouldSaveProductDetails(@Mock RequestProduct requestProduct) {
+    // Given
+    when(requestProduct.saveProduct(mockProduct())).thenReturn(mockProduct());
+    // When
+    Product product = requestProduct.saveProduct(mockProduct());
+    // Then
+    assertThat(product).isNotNull().usingRecursiveComparison().isEqualTo(mockProduct());
+    verify(requestProduct, times(1)).saveProduct(mockProduct());
+  }
   // ****************************************
   // ***************  HELPER  *****************
   // ****************************************

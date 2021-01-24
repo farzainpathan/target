@@ -11,11 +11,15 @@ public interface RequestProduct {
 
   Product getProductByProductId(Long productId) throws ProductNotFoundException;
 
-  List<Product> getAllProductsWithinPriceRange(Double lowerLimit, Double higherLimit) throws ProductNotFoundException;
+  List<Product> getAllProductsWithinPriceRange(Double lowerLimit, Double higherLimit)
+      throws ProductNotFoundException;
 
   Product getProductByProductName(String productName) throws ProductNotFoundException;
 
   Product getProductById(String id) throws ProductNotFoundException;
 
-    List<Product> getAllProductsByProductCategory(String productCategory) throws ProductNotFoundException;
+  List<Product> getAllProductsByProductCategory(String productCategory)
+      throws ProductNotFoundException;
+
+  Product saveProduct(Product product);
 }

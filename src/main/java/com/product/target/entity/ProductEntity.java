@@ -45,4 +45,14 @@ public class ProductEntity {
         .currentPrice(Price.builder().value(price).currency(currency).build())
         .build();
   }
+
+  public static ProductEntity toEntity(Product product) {
+    return ProductEntity.builder()
+        .productId(product.getProductId())
+        .name(product.getName())
+        .price(product.getCurrentPrice().getValue())
+        .currency(product.getCurrentPrice().getCurrency())
+        .category(product.getCategory())
+        .build();
+  }
 }
