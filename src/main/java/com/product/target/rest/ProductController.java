@@ -29,22 +29,55 @@ public class ProductController {
     return requestProduct.getAllProducts();
   }
 
-  @GetMapping("/products/{id}")
+  @GetMapping("/product-by/{id}")
   @ApiOperation(value = "This endpoint fetches the products by product id from database")
   public Product getProductByProductId(@PathVariable Long id) throws ProductNotFoundException {
     log.info("Ask service for product details for product Id : " + id);
     return requestProduct.getProductByProductId(id);
   }
 
+  @GetMapping("/product/{id}")
+  @ApiOperation(value = "This endpoint fetches the products by product id from database")
+  public Product getProductById(@PathVariable String id) throws ProductNotFoundException {
+    log.info("Ask service for product details for Id : " + id);
+    return requestProduct.getProductById(id);
+  }
+
+  @GetMapping("/products/price")
+  @ApiOperation(value = "This endpoint fetches the products within the price range")
+  public List<Product> getProductsWithinPriceRange(
+      @RequestParam("priceLowerLimit") Double lowerLimit,
+      @RequestParam("priceHigherLimit") Double higherLimit)
+      throws ProductNotFoundException {
+    log.info("Ask service for all products within the price range : " + lowerLimit + " and " + higherLimit);
+    return requestProduct.getAllProductsWithinPriceRange(lowerLimit, higherLimit);
+  }
+
+  @GetMapping("/products/name")
+  @ApiOperation(value = "This endpoint fetches the products by product id from database")
+  public Product getProductByProductName(@RequestParam String productName)
+      throws ProductNotFoundException {
+    log.info("Ask service for product details for product name : " + productName);
+    return requestProduct.getProductByProductName(productName);
+  }
+
+  @GetMapping("/products/category")
+  @ApiOperation(value = "This endpoint fetches the products by product id from database")
+  public Product getProductByProductCategory(@RequestParam String categoryName)
+          throws ProductNotFoundException {
+    log.info("Ask service for product details for product name : " + categoryName);
+    throw new ProductNotFoundException("Yet to be implemented");
+  }
+
   @PutMapping("/products/{id}")
   @ApiOperation(value = "This endpoint updates the products by id into database")
-  public Product updatedProductById(@PathVariable Long id) {
-    return Product.builder().build();
+  public Product updatedProductById(@PathVariable Long id) throws ProductNotFoundException {
+    throw new ProductNotFoundException("Yet to be implemented");
   }
 
   @PostMapping("/products")
   @ApiOperation(value = "This endpoint save the products information into database")
-  public Product saveProduct(Product product) {
-    return Product.builder().build();
+  public Product saveProduct(Product product) throws ProductNotFoundException {
+    throw new ProductNotFoundException("Yet to be implemented");
   }
 }

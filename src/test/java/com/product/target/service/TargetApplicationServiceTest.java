@@ -9,12 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -85,6 +83,59 @@ public class TargetApplicationServiceTest {
     verify(requestProduct, times(1)).getProductByProductId(500L);
   }
 
+  @Test
+  @Order(4)
+  @DisplayName("should fetch product details when asked by requested price range from repository")
+  public void shouldFetchProductDetailsForRequestedPriceRange(@Mock RequestProduct requestProduct)
+      throws ProductNotFoundException {
+    // Given
+    when(requestProduct.getAllProductsWithinPriceRange(anyDouble(), anyDouble()))
+        .thenReturn(mockProductList());
+    // When
+    List<Product> productList = requestProduct.getAllProductsWithinPriceRange(1.0, 12.0);
+    // Then
+    assertThat(productList)
+        .isNotNull()
+        .isNotEmpty()
+        .hasSize(2)
+        .extracting("id", "productId", "name", "currentPrice")
+        .containsExactly(
+            tuple(
+                mockProductList().get(0).getId(),
+                mockProductList().get(0).getProductId(),
+                mockProductList().get(0).getName(),
+                mockProductList().get(0).getCurrentPrice()),
+            tuple(
+                mockProductList().get(1).getId(),
+                mockProductList().get(1).getProductId(),
+                mockProductList().get(1).getName(),
+                mockProductList().get(1).getCurrentPrice()));
+
+    verify(requestProduct, times(1)).getAllProductsWithinPriceRange(1.0, 12.0);
+  }
+
+  @Test
+  @Order(5)
+  @DisplayName("should fetch product details when asked by product name from repository")
+  public void shouldFetchProductDetailsByProductName(@Mock RequestProduct requestProduct)
+      throws ProductNotFoundException {
+    // Given
+    when(requestProduct.getProductByProductName(anyString())).thenReturn(mockProduct());
+    // When
+    Product product = requestProduct.getProductByProductName("Canada Dry Ginger Ale - 2 L Bottle");
+    // Then
+    assertThat(product)
+            .isNotNull()
+            .extracting("id", "productId", "name", "currentPrice", "category")
+            .containsExactly(
+                    mockProduct().getId(),
+                    mockProduct().getProductId(),
+                    mockProduct().getName(),
+                    mockProduct().getCurrentPrice(),
+                    mockProduct().getCategory());
+    verify(requestProduct, times(1)).getProductByProductName("Canada Dry Ginger Ale - 2 L Bottle");
+  }
+
   // ****************************************
   // ***************  UPDATE  ***************
   // ****************************************
@@ -102,6 +153,7 @@ public class TargetApplicationServiceTest {
             .id("600ca5eeaf973673acd7fd0d")
             .productId(100L)
             .name("Canada Dry Ginger Ale - 2 L Bottle")
+            .category("grocery")
             .currentPrice(Price.builder().value(10.9).currency("USD").build())
             .build(),
         Product.builder()
@@ -117,6 +169,7 @@ public class TargetApplicationServiceTest {
         .id("600ca5eeaf973673acd7fd0d")
         .productId(500L)
         .name("Canada Dry Ginger Ale - 2 L Bottle")
+        .category("grocery")
         .currentPrice(Price.builder().value(10.9).currency("USD").build())
         .build();
   }

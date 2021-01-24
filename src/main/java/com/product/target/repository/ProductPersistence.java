@@ -9,5 +9,12 @@ public interface ProductPersistence {
 
   List<Product> fetchAllProducts();
 
-  Product fetchProductById(Long id) throws ProductNotFoundException;
+  Product fetchProductByProductId(Long id) throws ProductNotFoundException;
+
+  List<Product> fetchAllProductsWithinPriceRange(Double lowerLimit, Double higherLimit)
+      throws ProductNotFoundException;
+
+  Product fetchProductByProductName(String productName) throws ProductNotFoundException;
+
+  Product fetchProductById(String id) throws ProductNotFoundException;
 }

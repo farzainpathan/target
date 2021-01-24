@@ -33,11 +33,15 @@ public class ProductEntity {
   @Field("currency")
   private String currency;
 
+  @Field("category")
+  private String category;
+
   public Product toModel() {
     return Product.builder()
         .id(id)
         .productId(productId)
         .name(name)
+        .category(category)
         .currentPrice(Price.builder().value(price).currency(currency).build())
         .build();
   }

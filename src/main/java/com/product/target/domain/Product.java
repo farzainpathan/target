@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class Product {
   private String id;
   private Long productId;
+  private String category;
   private String name;
   private Price currentPrice;
 }

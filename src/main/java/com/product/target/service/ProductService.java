@@ -26,6 +26,24 @@ public class ProductService implements RequestProduct {
   @Override
   public Product getProductByProductId(Long productId) throws ProductNotFoundException {
     log.info("Fetching product details from repository for product Id : " + productId);
-    return productPersistence.fetchProductById(productId);
+    return productPersistence.fetchProductByProductId(productId);
+  }
+
+  @Override
+  public List<Product> getAllProductsWithinPriceRange(Double lowerLimit, Double higherLimit) throws ProductNotFoundException {
+    log.info("Fetching all products within the price range between: " + lowerLimit + " and " + higherLimit);
+    return productPersistence.fetchAllProductsWithinPriceRange(lowerLimit, higherLimit);
+  }
+
+  @Override
+  public Product getProductByProductName(String productName) throws ProductNotFoundException {
+    log.info("Fetching product details from repository for product name : " + productName);
+    return productPersistence.fetchProductByProductName(productName);
+  }
+
+  @Override
+  public Product getProductById(String id) throws ProductNotFoundException {
+    log.info("Fetching product details from repository for Id : " + id);
+    return productPersistence.fetchProductById(id);
   }
 }
