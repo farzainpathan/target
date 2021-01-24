@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.product.target.service.validator.ProductParameterRequestValidator.PARAMETER_REQUEST_VALIDATOR;
+
 @Service
 @Slf4j
 public class ProductService implements RequestProduct {
@@ -30,20 +32,24 @@ public class ProductService implements RequestProduct {
   }
 
   @Override
-  public List<Product> getAllProductsWithinPriceRange(Double lowerLimit, Double higherLimit) throws ProductNotFoundException {
+  public List<Product> getAllProductsWithinPriceRange(Double lowerLimit, Double higherLimit)
+      throws ProductNotFoundException {
     log.info("Fetching all products within the price range between: " + lowerLimit + " and " + higherLimit);
+    PARAMETER_REQUEST_VALIDATOR.assertPriceRange(lowerLimit, higherLimit);
     return productPersistence.fetchAllProductsWithinPriceRange(lowerLimit, higherLimit);
   }
 
   @Override
   public Product getProductByProductName(String productName) throws ProductNotFoundException {
     log.info("Fetching product details from repository for product name : " + productName);
+    PARAMETER_REQUEST_VALIDATOR.assertParameterStringValue(productName);
     return productPersistence.fetchProductByProductName(productName);
   }
 
   @Override
   public Product getProductById(String id) throws ProductNotFoundException {
     log.info("Fetching product details from repository for Id : " + id);
+    PARAMETER_REQUEST_VALIDATOR.assertParameterStringValue(id);
     return productPersistence.fetchProductById(id);
   }
 }

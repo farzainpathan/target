@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(OrderAnnotation.class)
@@ -135,7 +134,6 @@ public class TargetApplicationServiceTest {
                     mockProduct().getCategory());
     verify(requestProduct, times(1)).getProductByProductName("Canada Dry Ginger Ale - 2 L Bottle");
   }
-
   // ****************************************
   // ***************  UPDATE  ***************
   // ****************************************
