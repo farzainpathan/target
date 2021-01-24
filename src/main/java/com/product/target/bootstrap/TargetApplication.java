@@ -46,35 +46,41 @@ public class TargetApplication implements CommandLineRunner {
         new Document()
             .append("productId", "100")
             .append("name", "Canada Dry Ginger Ale - 2 L Bottle")
+            .append("category", "grocery")
             .append("price", "10.90")
             .append("currency", "USD"));
     documentList.add(
         new Document()
             .append("productId", "200")
             .append("name", "Pepsi Zero - 15pk/12 fl oz Cans")
+            .append("category", "grocery")
             .append("price", "20.36")
             .append("currency", "USD"));
     documentList.add(
         new Document()
             .append("productId", "300")
             .append("name", "Darlah Firwood Table - Christopher Knight Home")
+            .append("category", "furniture")
             .append("price", "38.39")
             .append("currency", "USD"));
     documentList.add(
         new Document()
             .append("productId", "400")
             .append("name", "Urban Industrial Farmhouse Metal X Entry Table - Saracina Home")
+            .append("category", "furniture")
             .append("price", "152.99")
             .append("currency", "USD"));
     documentList.add(
         new Document()
             .append("productId", "500")
             .append("name", "8pc Foam Paint Brush Variety Pack - Hand Made Modern")
+            .append("category", "painting")
             .append("price", "1.49")
             .append("currency", "USD"));
     documentList.add(
         new Document()
             .append("productId", "600")
+            .append("category", "furniture")
             .append("name", "Unfinished Natural Wood Tray Small - Hand Made Modern")
             .append("price", "7.99")
             .append("currency", "USD"));

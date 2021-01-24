@@ -10,4 +10,10 @@ public interface RequestProduct {
   List<Product> getAllProducts();
 
   Product getProductByProductId(Long productId) throws ProductNotFoundException;
+
+  List<Product> getAllProductsWithinPriceRange(Double lowerLimit, Double higherLimit) throws ProductNotFoundException;
+
+  Product getProductByProductName(String productName) throws ProductNotFoundException;
+
+  Product getProductById(String id) throws ProductNotFoundException;
 }

@@ -12,7 +12,15 @@ public class ProductNotFoundException extends Exception {
     super("No product found in the database with id: " + productId);
   }
 
-  public ProductNotFoundException(String productName) {
-    super("No product found in the database with name: " + productName);
+  public ProductNotFoundException(String key) {
+    super("No product found in the database with name|id: " + key);
+  }
+
+  public ProductNotFoundException(Double lowerLimit, Double higherLimit) {
+    super(
+        "No product found in the database within the requested price range of : "
+            + lowerLimit
+            + " and "
+            + higherLimit);
   }
 }
