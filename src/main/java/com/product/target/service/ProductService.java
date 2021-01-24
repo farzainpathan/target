@@ -1,6 +1,7 @@
 package com.product.target.service;
 
 import com.product.target.domain.Product;
+import com.product.target.exception.ProductNotFoundException;
 import com.product.target.repository.ProductPersistence;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,11 @@ public class ProductService implements RequestProduct {
   public List<Product> getAllProducts() {
     log.info("Fetching all product information from repository");
     return productPersistence.fetchAllProducts();
+  }
+
+  @Override
+  public Product getProductByProductId(Long productId) throws ProductNotFoundException {
+    log.info("Fetching product details from repository for product Id : " + productId);
+    return productPersistence.fetchProductById(productId);
   }
 }

@@ -3,6 +3,7 @@ package com.product.target.repository;
 import com.product.target.bootstrap.TargetApplication;
 import com.product.target.domain.Price;
 import com.product.target.domain.Product;
+import com.product.target.exception.ProductNotFoundException;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.*;
 
 @SpringBootTest(classes = TargetApplication.class)
@@ -67,6 +69,35 @@ public class TargetApplicationRepositoryTest {
                 600L,
                 "Unfinished Natural Wood Tray Small - Hand Made Modern",
                 Price.builder().value(7.99).currency("USD").build()));
+  }
+
+  @Test
+  @Order(3)
+  @DisplayName("should fetch product details when asked by product Id from database ")
+  public void shouldFetchProductDetailsByProductId() throws ProductNotFoundException {
+    // Given data from changelogs
+    // When
+    Product productDetailsByProductId = productPersistence.fetchProductById(300L);
+    // Then
+    assertThat(productDetailsByProductId)
+        .isNotNull()
+        .extracting("productId", "name", "currentPrice")
+        .containsExactly(
+            300L,
+            "Darlah Firwood Table - Christopher Knight Home",
+            Price.builder().value(38.39).currency("USD").build());
+  }
+
+  @Test
+  @Order(4)
+  @DisplayName(
+      "should throw exception when asked for product details by product Id not exist in database ")
+  public void shouldThrowExceptionWhenProductIdNotExist() throws ProductNotFoundException {
+    // Given data from changelogs
+    // When and Then
+    assertThatThrownBy(() -> productPersistence.fetchProductById(1000L))
+        .isInstanceOf(ProductNotFoundException.class)
+        .hasMessageContaining("No product found in the database with id: 1000");
   }
   // ****************************************
   // ***************  UPDATE  ***************
