@@ -20,4 +20,7 @@ public interface ProductDao extends MongoRepository<ProductEntity, String> {
 
     @Query("{ 'name' : ?0 }")
     Optional<ProductEntity> findByProductName(String productName);
+
+    @Query("{ 'category' : ?0 }")
+    Optional<List<ProductEntity>> findAllProductsByCategory(String productCategory);
 }

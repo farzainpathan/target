@@ -13,7 +13,7 @@ public class ProductNotFoundException extends Exception {
   }
 
   public ProductNotFoundException(String key) {
-    super("No product found in the database with name|id: " + key);
+    super("No product found in the database with name|id|category: " + key);
   }
 
   public ProductNotFoundException(Double lowerLimit, Double higherLimit) {

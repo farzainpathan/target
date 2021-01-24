@@ -63,21 +63,23 @@ public class ProductController {
 
   @GetMapping("/products/category")
   @ApiOperation(value = "This endpoint fetches the products by product id from database")
-  public Product getProductByProductCategory(@RequestParam String categoryName)
+  public List<Product> getProductByProductCategory(@RequestParam String categoryName)
           throws ProductNotFoundException {
     log.info("Ask service for product details for product name : " + categoryName);
-    throw new ProductNotFoundException("Yet to be implemented");
+    return requestProduct.getAllProductsByProductCategory(categoryName);
   }
 
-  @PutMapping("/products/{id}")
+  @PutMapping("/products/update")
   @ApiOperation(value = "This endpoint updates the products by id into database")
-  public Product updatedProductById(@PathVariable Long id) throws ProductNotFoundException {
+  public Product updatedProductById(Product product) throws ProductNotFoundException {
+    log.info("Updating the existing product : " + product);
     throw new ProductNotFoundException("Yet to be implemented");
   }
 
-  @PostMapping("/products")
+  @PostMapping("/products/save")
   @ApiOperation(value = "This endpoint save the products information into database")
   public Product saveProduct(Product product) throws ProductNotFoundException {
+    log.info("Persisting the new product : " + product);
     throw new ProductNotFoundException("Yet to be implemented");
   }
 }

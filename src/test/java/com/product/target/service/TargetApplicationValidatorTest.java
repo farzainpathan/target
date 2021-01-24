@@ -1,6 +1,5 @@
 package com.product.target.service;
 
-import com.product.target.exception.ProductNotFoundException;
 import com.product.target.repository.ProductPersistence;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,10 +14,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TargetApplicationValidatorTest {
 
-  /*@Before
-  public void init() {
-    MockitoAnnotations.initMocks(this);
-  }*/
   // ****************************************
   // ***************  GET  ******************
   // ****************************************
@@ -57,7 +52,8 @@ public class TargetApplicationValidatorTest {
     // When and Then
     assertThatThrownBy(() -> requestProduct.getAllProductsWithinPriceRange(10.0, -10.0))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("higherLimit value cannot be negative Lower limit cannot be greater/equal to higher limit ");
+        .hasMessageContaining(
+            "higherLimit value cannot be negative Lower limit cannot be greater/equal to higher limit ");
   }
 
   @Test
@@ -93,6 +89,19 @@ public class TargetApplicationValidatorTest {
     RequestProduct requestProduct = Mockito.spy(new ProductService(productPersistence));
     // When and Then
     assertThatThrownBy(() -> requestProduct.getProductById(""))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("The requesting parameter value cannot be null or Empty");
+  }
+
+  @Test
+  @Order(7)
+  @DisplayName("should throw exception for Empty product category")
+  public void shouldThrowExceptionForProductCategoryEmpty(
+      @Mock ProductPersistence productPersistence) {
+    // Given
+    RequestProduct requestProduct = Mockito.spy(new ProductService(productPersistence));
+    // When and Then
+    assertThatThrownBy(() -> requestProduct.getAllProductsByProductCategory(""))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("The requesting parameter value cannot be null or Empty");
   }
