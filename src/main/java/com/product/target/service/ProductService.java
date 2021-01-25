@@ -40,7 +40,7 @@ public class ProductService implements RequestProduct {
   }
 
   @Override
-  public Product getProductByProductName(String productName) throws ProductNotFoundException {
+  public List<Product> getProductByProductName(String productName) throws ProductNotFoundException {
     log.info("Fetching product details from repository for product name : " + productName);
     PARAMETER_REQUEST_VALIDATOR.assertParameterStringValue(productName);
     return productPersistence.fetchProductByProductName(productName);

@@ -148,17 +148,20 @@ public class TargetApplicationRepositoryTest {
   public void shouldFetchProductDetailsByProductName() throws ProductNotFoundException {
     // Given data from changelogs
     // When
-    Product productDetailsByProductName =
+    List<Product> productDetailsByProductName =
         productPersistence.fetchProductByProductName(
             "Darlah Firwood Table - Christopher Knight Home");
     // Then
     assertThat(productDetailsByProductName)
         .isNotNull()
+        .isNotEmpty()
+        .hasSize(1)
         .extracting("productId", "name", "currentPrice")
         .containsExactly(
-            300L,
-            "Darlah Firwood Table - Christopher Knight Home",
-            Price.builder().value(38.39).currency("USD").build());
+            tuple(
+                300L,
+                "Darlah Firwood Table - Christopher Knight Home",
+                Price.builder().value(38.39).currency("USD").build()));
   }
 
   @Test

@@ -55,7 +55,7 @@ public class ProductController {
 
   @GetMapping("/products/name")
   @ApiOperation(value = "This endpoint fetches the products by product id from database")
-  public Product getProductByProductName(@RequestParam String productName)
+  public List<Product> getProductByProductName(@RequestParam String productName)
       throws ProductNotFoundException {
     log.info("Ask service for product details for product name : " + productName);
     return requestProduct.getProductByProductName(productName);

@@ -14,7 +14,7 @@ public interface RequestProduct {
   List<Product> getAllProductsWithinPriceRange(Double lowerLimit, Double higherLimit)
       throws ProductNotFoundException;
 
-  Product getProductByProductName(String productName) throws ProductNotFoundException;
+  List<Product> getProductByProductName(String productName) throws ProductNotFoundException;
 
   Product getProductById(String id) throws ProductNotFoundException;
 
