@@ -1,5 +1,6 @@
 package com.product.target.repository;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -10,9 +11,12 @@ import com.product.target.entity.ProductEntity;
 import com.product.target.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -90,8 +94,21 @@ public class ProductRepository implements ProductPersistence {
     log.info("Persisting product details into database : " + product);
     MongoCollection<Document> productCollection = getDatabaseConnection();
     productCollection.insertOne(toDocument(product));
-    Query query = new Query().addCriteria(Criteria.where("productId").is(product.getProductId().toString()));
+    Query query =
+        new Query().addCriteria(Criteria.where("productId").is(product.getProductId().toString()));
     return mongoTemplate.find(query, ProductEntity.class).get(0).toModel();
+  }
+
+  @Override
+  public Product updateProduct(Product updateProduct) throws ProductNotFoundException {
+    log.info("Updating product details into database : " + updateProduct);
+    MongoCollection<Document> productCollection = getDatabaseConnection();
+    Document document = toDocument(updateProduct);
+    BasicDBObject filter = new BasicDBObject("_id", new ObjectId(updateProduct.getId()));
+    productCollection.updateOne(filter, new BasicDBObject("$set", document));
+    Optional<Product> product = findDocumentWithId(updateProduct.getId());
+    if (product.isPresent()) return product.get();
+    else throw new ProductNotFoundException(updateProduct);
   }
 
   private Document toDocument(Product product) {
@@ -118,17 +135,17 @@ public class ProductRepository implements ProductPersistence {
     for (Document d : productCollection.find()) {
       if (d.get("_id").toString().equals(id)) {
         return Optional.of(
-                Product.builder()
-                        .id(d.get("_id").toString())
-                        .productId(Long.parseLong(d.getString("productId").toString()))
-                        .name(d.get("name").toString())
-                        .category(d.get("category").toString())
-                        .currentPrice(
-                                Price.builder()
-                                        .value(Double.parseDouble(d.get("price").toString()))
-                                        .currency(d.get("currency").toString())
-                                        .build())
-                        .build());
+            Product.builder()
+                .id(d.get("_id").toString())
+                .productId(Long.parseLong(d.getString("productId").toString()))
+                .name(d.get("name").toString())
+                .category(d.get("category").toString())
+                .currentPrice(
+                    Price.builder()
+                        .value(Double.parseDouble(d.get("price").toString()))
+                        .currency(d.get("currency").toString())
+                        .build())
+                .build());
       }
     }
     return Optional.empty();

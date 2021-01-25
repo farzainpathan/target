@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/v1")
-@Api(value = "Target-Product Endpoints")
+@Api(tags = "Product Commands", value = "ProductCommands")
 public class ProductController {
 
   private final RequestProduct requestProduct;
@@ -49,7 +49,7 @@ public class ProductController {
       @RequestParam("priceLowerLimit") Double lowerLimit,
       @RequestParam("priceHigherLimit") Double higherLimit)
       throws ProductNotFoundException {
-    log.info("Ask service for all products within the price range : " + lowerLimit + " and " + higherLimit);
+    log.info("Ask service for products in price range : " + lowerLimit + " and " + higherLimit);
     return requestProduct.getAllProductsWithinPriceRange(lowerLimit, higherLimit);
   }
 
@@ -64,21 +64,21 @@ public class ProductController {
   @GetMapping("/products/category")
   @ApiOperation(value = "This endpoint fetches the products by product id from database")
   public List<Product> getProductByProductCategory(@RequestParam String categoryName)
-          throws ProductNotFoundException {
+      throws ProductNotFoundException {
     log.info("Ask service for product details for product name : " + categoryName);
     return requestProduct.getAllProductsByProductCategory(categoryName);
   }
 
   @PutMapping("/products/update")
   @ApiOperation(value = "This endpoint updates the products by id into database")
-  public Product updatedProductById(Product product) throws ProductNotFoundException {
+  public Product updatedProductById(@RequestBody Product product) throws ProductNotFoundException {
     log.info("Updating the existing product : " + product);
-    throw new ProductNotFoundException("Yet to be implemented");
+    return requestProduct.updateProductById(product);
   }
 
   @PostMapping("/products/save")
   @ApiOperation(value = "This endpoint save the products information into database")
-  public Product saveProduct(Product product) {
+  public Product saveProduct(@RequestBody Product product) {
     log.info("Persisting the new product : " + product);
     return requestProduct.saveProduct(product);
   }

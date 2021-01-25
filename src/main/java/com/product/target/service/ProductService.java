@@ -34,11 +34,7 @@ public class ProductService implements RequestProduct {
   @Override
   public List<Product> getAllProductsWithinPriceRange(Double lowerLimit, Double higherLimit)
       throws ProductNotFoundException {
-    log.info(
-        "Fetching all products within the price range between: "
-            + lowerLimit
-            + " and "
-            + higherLimit);
+    log.info("Fetching products in price range: " + lowerLimit + " and " + higherLimit);
     PARAMETER_REQUEST_VALIDATOR.assertPriceRange(lowerLimit, higherLimit);
     return productPersistence.fetchAllProductsWithinPriceRange(lowerLimit, higherLimit);
   }
@@ -69,5 +65,11 @@ public class ProductService implements RequestProduct {
   public Product saveProduct(Product product) {
     log.info("Persisting the product details through repository : " + product);
     return productPersistence.saveProduct(product);
+  }
+
+  @Override
+  public Product updateProductById(Product updateProduct) throws ProductNotFoundException {
+    log.info("Updating the given product details by id : " + updateProduct);
+    return productPersistence.updateProduct(updateProduct);
   }
 }

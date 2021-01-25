@@ -5,7 +5,7 @@ import com.product.target.domain.Product;
 public class ProductNotFoundException extends Exception {
 
   public ProductNotFoundException(Product product) {
-    super("Invalid request : " + product);
+    super("Invalid request details: " + product);
   }
 
   public ProductNotFoundException(Long productId) {

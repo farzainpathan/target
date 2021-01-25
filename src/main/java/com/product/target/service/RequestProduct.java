@@ -22,4 +22,6 @@ public interface RequestProduct {
       throws ProductNotFoundException;
 
   Product saveProduct(Product product);
+
+  Product updateProductById(Product product) throws ProductNotFoundException;
 }
