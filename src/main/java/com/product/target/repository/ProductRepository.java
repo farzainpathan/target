@@ -61,10 +61,12 @@ public class ProductRepository implements ProductPersistence {
   }
 
   @Override
-  public Product fetchProductByProductName(String productName) throws ProductNotFoundException {
+  public List<Product> fetchProductByProductName(String productName)
+      throws ProductNotFoundException {
     log.info("Fetching product details from database for product name : " + productName);
-    Optional<ProductEntity> productEntity = productDao.findByProductName(productName);
-    if (productEntity.isPresent()) return productEntity.get().toModel();
+    List<ProductEntity> productEntity = productDao.findByProductName(productName);
+    if (productEntity.size() > 0)
+      return productEntity.stream().map(ProductEntity::toModel).collect(Collectors.toList());
     else throw new ProductNotFoundException(productName);
   }
 

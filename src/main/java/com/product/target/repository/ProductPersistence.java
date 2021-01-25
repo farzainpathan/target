@@ -14,7 +14,7 @@ public interface ProductPersistence {
   List<Product> fetchAllProductsWithinPriceRange(Double lowerLimit, Double higherLimit)
       throws ProductNotFoundException;
 
-  Product fetchProductByProductName(String productName) throws ProductNotFoundException;
+  List<Product> fetchProductByProductName(String productName) throws ProductNotFoundException;
 
   Product fetchProductById(String id) throws ProductNotFoundException;
 

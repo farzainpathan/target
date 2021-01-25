@@ -119,19 +119,21 @@ public class TargetApplicationServiceTest {
   public void shouldFetchProductDetailsByProductName(@Mock RequestProduct requestProduct)
       throws ProductNotFoundException {
     // Given
-    when(requestProduct.getProductByProductName(anyString())).thenReturn(mockProduct());
+    when(requestProduct.getProductByProductName(anyString())).thenReturn(List.of(mockProduct()));
     // When
-    Product product = requestProduct.getProductByProductName("Canada Dry Ginger Ale - 2 L Bottle");
+    List<Product> product =
+        requestProduct.getProductByProductName("Canada Dry Ginger Ale - 2 L Bottle");
     // Then
     assertThat(product)
         .isNotNull()
         .extracting("id", "productId", "name", "currentPrice", "category")
         .containsExactly(
-            mockProduct().getId(),
-            mockProduct().getProductId(),
-            mockProduct().getName(),
-            mockProduct().getCurrentPrice(),
-            mockProduct().getCategory());
+            tuple(
+                mockProduct().getId(),
+                mockProduct().getProductId(),
+                mockProduct().getName(),
+                mockProduct().getCurrentPrice(),
+                mockProduct().getCategory()));
     verify(requestProduct, times(1)).getProductByProductName("Canada Dry Ginger Ale - 2 L Bottle");
   }
 
@@ -170,7 +172,8 @@ public class TargetApplicationServiceTest {
   @Test
   @Order(7)
   @DisplayName("should update product details through repository")
-  public void shouldUpdateProductDetails(@Mock RequestProduct requestProduct) throws ProductNotFoundException {
+  public void shouldUpdateProductDetails(@Mock RequestProduct requestProduct)
+      throws ProductNotFoundException {
     // Given
     when(requestProduct.updateProductById(mockProduct())).thenReturn(mockProduct());
     // When
