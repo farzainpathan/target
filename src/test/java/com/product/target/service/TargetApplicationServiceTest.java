@@ -167,12 +167,24 @@ public class TargetApplicationServiceTest {
   // ****************************************
   // ***************  UPDATE  ***************
   // ****************************************
+  @Test
+  @Order(7)
+  @DisplayName("should update product details through repository")
+  public void shouldUpdateProductDetails(@Mock RequestProduct requestProduct) throws ProductNotFoundException {
+    // Given
+    when(requestProduct.updateProductById(mockProduct())).thenReturn(mockProduct());
+    // When
+    Product product = requestProduct.updateProductById(mockProduct());
+    // Then
+    assertThat(product).isNotNull().usingRecursiveComparison().isEqualTo(mockProduct());
+    verify(requestProduct, times(1)).updateProductById(mockProduct());
+  }
 
   // ****************************************
   // ***************  SAVE  *****************
   // ****************************************
   @Test
-  @Order(7)
+  @Order(8)
   @DisplayName("should save product details through repository")
   public void shouldSaveProductDetails(@Mock RequestProduct requestProduct) {
     // Given

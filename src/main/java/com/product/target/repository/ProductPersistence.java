@@ -21,4 +21,6 @@ public interface ProductPersistence {
   List<Product> fetchAllProductsByCategory(String grocery) throws ProductNotFoundException;
 
   Product saveProduct(Product product);
+
+  Product updateProduct(Product updateProduct) throws ProductNotFoundException;
 }
