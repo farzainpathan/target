@@ -1,9 +1,11 @@
 package com.product.target.service;
 
+import com.product.target.domain.Cart;
 import com.product.target.domain.Product;
 import com.product.target.exception.ProductNotFoundException;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RequestProduct {
 
@@ -24,4 +26,10 @@ public interface RequestProduct {
   Product saveProduct(Product product);
 
   Product updateProductById(Product product) throws ProductNotFoundException;
+
+  Map<Product, Integer> addProduct(Long productId) throws ProductNotFoundException;
+
+  Map<Product, Integer> removeProduct(Long productId) throws ProductNotFoundException;
+
+  Cart checkout();
 }
